@@ -145,18 +145,141 @@ gltfLoader.load(
     }
 )
 
+let house = null
+gltfLoader.load(
+    'House.glb',
+    (gltf) =>
+    {
+        house = gltf.scene
+        house.scale.set(8, 8, 8)
+        house.position.x =  5
+        house.position.z =  -6
+        house.position.y =  3
+        // house.rotation.y = Math.PI * 0.5
 
+
+        house.traverse((child) => {
+            if(child.isMesh)
+            {
+                child.castShadow = true
+                child.receiveShadow = true
+            }
+        })
+
+        scene.add(house)
+    }
+)
+
+let Asteroid = null
+gltfLoader.load(
+    'Asteroid.glb',
+    (gltf) =>
+    {
+        Asteroid = gltf.scene
+        Asteroid.position.z = 35
+        Asteroid.position.x = - 4
+        Asteroid.position.y = - 0.6
+        Asteroid.scale.set(0.9, 0.9, 0.9)
+
+        Asteroid.traverse((child) => {
+            if(child.isMesh)
+            {
+                child.castShadow = true
+                child.receiveShadow = true
+            }
+        })
+
+        scene.add(Asteroid)
+    }
+)
+
+let SpaceShip = null
+gltfLoader.load(
+    'SpaceShip.glb',
+    (gltf) =>
+    {
+        SpaceShip = gltf.scene
+        SpaceShip.position.x = - 0.7
+        SpaceShip.position.z = 45
+        SpaceShip.scale.set(3, 3, 3)
+        SpaceShip.rotation.x = 0.5
+        SpaceShip.position.y = - 3
+
+        SpaceShip.traverse((child) => {
+            if(child.isMesh)
+            {
+                child.castShadow = true
+                child.receiveShadow = true
+            }
+        })
+
+        scene.add(SpaceShip)
+    }
+)
+
+let Astronaut = null
+gltfLoader.load(
+    'Astronaut.glb',
+    (gltf) =>
+    {
+        Astronaut = gltf.scene
+        Astronaut.position.x = 12
+        Astronaut.position.z =  39
+        Astronaut.scale.set(3, 3, 3)
+        Astronaut.rotation.y = 1.5
+        Astronaut.position.y = - 0.1
+
+        Astronaut.traverse((child) => {
+            if(child.isMesh)
+            {
+                child.castShadow = true
+                child.receiveShadow = true
+            }
+        })
+
+        scene.add(Astronaut)
+    }
+)
+
+let Alien = null
+gltfLoader.load(
+    'Alien.glb',
+    (gltf) =>
+    {
+        Alien = gltf.scene
+        Alien.position.x = - 12
+        Alien.position.z =  3.2
+        Alien.scale.set(0.8, 0.8, 0.8)
+        // Alien.rotation.y = - 1.5
+        Alien.position.y = - 1
+
+        Alien.traverse((child) => {
+            if(child.isMesh)
+            {
+                child.castShadow = true
+                child.receiveShadow = true
+            }
+        })
+
+        scene.add(Alien)
+    }
+)
 /**
  * Textures
  */
 // Declaratition des textures
 const textureLoader = new THREE.TextureLoader()
 const floorsColorTexture = textureLoader.load('./LightWoodenParquetFlooring06_4K_BaseColor.png')
+const flooraColorTexture = textureLoader.load('./Granite.png')
 
 floorsColorTexture.wrapS = THREE.RepeatWrapping
 floorsColorTexture.wrapT = THREE.RepeatWrapping
 floorsColorTexture.repeat.x = 3
 floorsColorTexture.repeat.y = 3
+flooraColorTexture.wrapS = THREE.RepeatWrapping
+flooraColorTexture.wrapT = THREE.RepeatWrapping
+flooraColorTexture.repeat.x = 5
+flooraColorTexture.repeat.y = 5
 
 /**
  * Scene
@@ -191,7 +314,8 @@ window.addEventListener('resize', () =>
  * Camera
  */
 const camera = new THREE.PerspectiveCamera(40, sizes.width / sizes.height)
-camera.position.z = 4
+camera.position.x = 60
+camera.position.y = 25
 scene.add(camera)
 
 /**
@@ -230,7 +354,7 @@ scene.add(floor)
 
 const wall1 = new THREE.Mesh(
     new THREE.PlaneGeometry(33, 8),
-    new THREE.MeshBasicMaterial({ color: 0xffcc99, side: THREE.DoubleSide })
+    new THREE.MeshBasicMaterial({ map: flooraColorTexture, side: THREE.DoubleSide })
 )
 wall1.position.y = 3
 wall1.position.x = 25
@@ -240,7 +364,7 @@ scene.add(wall1)
 
 const wall2 = new THREE.Mesh(
     new THREE.PlaneGeometry(33, 8),
-    new THREE.MeshBasicMaterial({ color: 0xffcc99, side: THREE.DoubleSide })
+    new THREE.MeshBasicMaterial({ map: flooraColorTexture, side: THREE.DoubleSide })
 )
 wall2.position.y = 3
 wall2.position.x = - 25
@@ -250,7 +374,7 @@ scene.add(wall2)
 
 const wall3 = new THREE.Mesh(
     new THREE.PlaneGeometry(50, 8),
-    new THREE.MeshBasicMaterial({ color: 0xffcc99, side: THREE.DoubleSide })
+    new THREE.MeshBasicMaterial({ map: flooraColorTexture, side: THREE.DoubleSide })
 )
 wall3.position.y = 3
 wall3.position.z = - 24.2
@@ -308,16 +432,27 @@ audioLoader.load( '/Cosmos.mp4', function( buffer ) {
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.4)
 scene.add(ambientLight)
 
-
+const pointLight2 = new THREE.PointLight(0xa61fd2, 1000, 30)
+    pointLight2.position.x = - 0.7
+    pointLight2.position.z = 50
+    pointLight2.rotation.x = 0.5
+    pointLight2.position.y = - 1
+scene.add(pointLight2)
 
 const pointLight = new THREE.PointLight(0xffffff, 3, 3)
 pointLight.position.x = - 2.5
-        pointLight.position.z = - 4
-        pointLight.position.y = 0.5
+pointLight.position.z = - 4
+pointLight.position.y = 0.5
 scene.add(pointLight)
 
+const pt1 = new THREE.PointLight(0xffffff, 10, 3)
+pt1.position.x = - 12
+pt1.position.z = 4
+pt1.position.y = 12
+scene.add(pt1)
+
 const spotLight = new THREE.SpotLight(0xdcc51c, 10, 10,  15, 0.5)
-spotLight.position.x = 2.9
+spotLight.position.x = - 2.9
 spotLight.position.z = 2.9
 scene.add(spotLight)
 
@@ -350,6 +485,14 @@ const loop = () =>
 
     // Render
     renderer.render(scene, camera)
+
+    // Update model
+    if(Asteroid !== null)
+    Asteroid.rotation.y = Date.now() * 0.00008
+
+    // // Update model
+    // if(Astronaut !== null)
+    // Astronaut.position.x = Date.now() * (-0.00000008)
 }
 
 loop()
